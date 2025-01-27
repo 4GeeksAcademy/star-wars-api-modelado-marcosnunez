@@ -12,45 +12,65 @@ db = SQLAlchemy(app)
 
 class User(db.Model):
     __tablename__ = 'user'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
     id = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.String(50), nullable=False)
-    first_name = db.Column(db.String(50), nullable=False)
-    last_name = db.Column(db.String(50), nullable=True)
-    email = db.Column(db.String(200)) 
+    user_name = db.Column(db.String(50), nullable = False)
+    password = db.Column(db.String(50), nullable = False)
+    email = db.Column(db.String(50), nullable = False)
+    favourite_list = db.Column(db.String(50), ForeignKey('favourite.id'), nullable = False)
 
-class Post(db.Model):
-    _tablename_= 'post'
+class Favourite(db.Model):
+    __tablename__ = 'favourite'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, ForeignKey('user.id'))
+    external_id = db.Column(db.Integer, nullable = False)
+    type = db.Column(db.Enum('character_id', 'planet_id', 'starship_id', name="favourites_colums"), nullable = False)
+    name = db.Column(db.String(50), nullable = False)
+    user_id = db.Column(db.Integer, ForeignKey('user.id'), nullable = False)
 
-class Comment(db.Model):
-    __tablename__ = 'comment'
-    # Here we define columns for the table address.
-    # Notice that each column is also a normal Python instance attribute.
+class Character(db.Model):
+    __tablename__ = 'character'
     id = db.Column(db.Integer, primary_key=True)
-    comment_text = db.Column(db.String(250))
-    author_id = db.Column(db.String(250), ForeignKey('user.id'))
-    post_id = db.Column(db.String(50), ForeignKey('post.id'))
+    name = db.Column(db.String(50), nullable=False)
+    height = db.Column(db.Integer, nullable=False)
+    home_world = db.Column(db.String(50),ForeignKey('planets.id'), nullable = False)
+    mass= db.Column(db.Integer, nullable = False) 
+    hair_color= db.Column(db.String(50), nullable=False)
+    eye_color=  db.Column(db.String(50), nullable = False)
+    birth_year = db.Column(db.Integer, nullable=False) 
+    gender = db.Column(db.Integer, nullable=False) 
+    description = db.Column(db.String(5000), nullable=False)
 
-class Media(db.Model):
-    _tablename_ = 'media'
+class Starships(db.Model):
+    _tablename_= 'starships'
     id = db.Column(db.Integer, primary_key=True)
-    type = db.Column(db.Enum('video', 'audio', 'image', name='media_types'), nullable=False)
-    url = db.Column(db.String(250))
-    post_id = db.Column(db.Integer, ForeignKey('post.id'))
+    name = db.Column(db.String(50), nullable=False)
+    cargo_capacity = db.Column(db.Integer, nullable=False)
+    mlgt = db.Column(db.String(50), nullable=False)
+    consumables = db.Column(db.String(50), nullable=False)
+    cost_in_credits = db.Column(db.Integer, primary_key=True)
+    crew = db.Column(db.String(5000), nullable=False)
+    hyperdrive_rating = db.Column(db.Integer, primary_key=True)
+    length  = db.Column(db.Integer, primary_key=True)
+    manufacturer = db.Column(db.Integer, nullable=False) 
+    passengers = db.Column(db.String(5000), nullable=False)
+    model = db.Column(db.String(5000), nullable=False)
+    max_atmosphering_speed =  db.Column(db.Integer, primary_key=True)
+    starship_class = db.Column(db.String(50), nullable=False)
 
-class Follower(db.Model):
-    _tablename_ = 'follower'
-    user_from_id = db.Column(db.Integer, ForeignKey('user.id'), primary_key=True)
-    user_to_id = db.Column(db.Integer, ForeignKey('user.id'), primary_key=True)
 
 
 
-
-
-
+class Planets(db.Model):
+    _tablename_ = 'planets'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    climate =  db.Column(db.String(50), nullable=False)
+    diameter = db.Column(db.Integer, primary_key=False)
+    gravity = db.Column(db.Integer, primary_key=False)
+    orbital_period = db.Column(db.Integer, primary_key=False)
+    population = db.Column(db.Integer, primary_key=False)
+    rotation_period = db.Column(db.Integer, primary_key=False)
+    terrain =  db.Column(db.String(50), nullable=False)
+    surface_water = db.Column(db.Integer, primary_key=False)
 
     def to_dict(self):
         return {}
