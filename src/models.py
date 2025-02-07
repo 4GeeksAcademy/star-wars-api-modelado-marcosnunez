@@ -36,7 +36,7 @@ class Character(db.Model):
     hair_color= db.Column(db.String(50), nullable=False)
     eye_color=  db.Column(db.String(50), nullable = False)
     birth_year = db.Column(db.Integer, nullable=False) 
-    gender = db.Column(db.Integer, nullable=False) 
+    gender = db.Column(db.String(50), nullable = False) 
     description = db.Column(db.String(5000), nullable=False)
 
 class Starships(db.Model):
